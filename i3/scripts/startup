@@ -17,8 +17,6 @@ i3-msg "$WORKSPACE 3; append_layout ~/.i3/workspaces/communications.json"
 sleep 0.2
 # Spotify and teams have issues when other stuff is
 # opening so sleep between those two
-i3-msg "exec flatpak run com.spotify.Client"
-sleep 1
 i3-msg "exec $TEAMS_APP"
 sleep 0.2
 i3-msg "exec $SUPPORT_APP"

@@ -126,11 +126,11 @@ alias ipv6-randip='dd if=/dev/urandom bs=8 count=1 2>/dev/null | od -x -A n | se
 
 bind -f ~/.inputrc
 
-export PNPM_HOME="/home/kalvens/.local/share/pnpm"
+export PNPM_HOME="/home/gabgriellef/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH:/home/kalvens/.local/bin"
 
 # pnpm
-export PNPM_HOME="/home/kalvens/.local/share/pnpm"
+export PNPM_HOME="/home/gabriellef/.local/share/pnpm"
 case ":$PATH:" in
 *":$PNPM_HOME:"*) ;;
 *) export PATH="$PNPM_HOME:$PATH" ;;
