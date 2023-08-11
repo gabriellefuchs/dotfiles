@@ -51,8 +51,14 @@ source_dir ~/.bash.d
 source_dir ~/.bash.d/local/after
 
 # ssh aliases
-alias ssh-vm='ssh -A kalvens@2620:9d:4000:72:136c:fa8:54b:9be1'
-alias ssh-ws='ssh kalvens@192.168.1.72'
+alias ssh-ws='ssh gabriellef.rtvision.com'
+ssh-port-forward() {
+	test -z "$1" && {
+		echo "Please provide the port to forward"
+		return
+	}
+    ssh -L $1:localhost:$1 -N gabriellef.rtvision.com
+}
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
@@ -128,8 +134,8 @@ alias ipv6-randip='dd if=/dev/urandom bs=8 count=1 2>/dev/null | od -x -A n | se
 
 bind -f ~/.inputrc
 
-export PNPM_HOME="/home/gabgriellef/.local/share/pnpm"
-export PATH="$PNPM_HOME:$PATH:/home/kalvens/.local/bin"
+export PNPM_HOME="/home/gabriellef/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH:/home/gabriellef/.local/bin"
 
 # pnpm
 export PNPM_HOME="/home/gabriellef/.local/share/pnpm"
