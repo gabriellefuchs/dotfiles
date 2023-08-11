@@ -1,9 +1,10 @@
 vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
-
 -- a cool remap, allows using shift j and k
 -- to move hightlighted text in visual mode
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+vim.keymap.set("v", "<", "<gv")
+vim.keymap.set("v", ">", ">gv")
 
 vim.keymap.set("n", "J", "mzJ`z")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
@@ -49,8 +50,16 @@ vim.keymap.set('n', '<leader>x', '<cmd>bd<CR>')
 vim.keymap.set('n', '<Space>', 'za')
 vim.keymap.set('n', '<leader>/', '<cmd>nohlsearch<CR>');
 
+vim.g.diagnostics_showing = true
 vim.keymap.set({ 'c', 'i', 'v', 'n' }, '<F8>', function()
 	-- Closest thing to a ternary in lua
 	local signColumnValue = (vim.wo.signcolumn == 'yes' and 'no') or 'yes';
+	if vim.g.diagnostics_showing then
+		vim.g.diagnostics_showing = false
+		vim.diagnostic.hide();
+	else
+		vim.g.diagnostics_showing = true
+		vim.diagnostic.show()
+	end
 	return ':set invpaste invnumber invlist relativenumber! signcolumn=' .. signColumnValue .. '<CR>';
 end, { expr = true })

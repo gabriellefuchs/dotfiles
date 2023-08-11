@@ -37,7 +37,13 @@ gfbs() {
 		return
 	}
 	git fetch -p
-	git flow bugfix start $1 $(git branch -a | grep -E 'remotes.*release' | sed 's%remotes/origin/%%' | sort | tail -n1 | xargs)
+	local current_release_branch="$(git branch -a | grep -E 'remotes.*release' | sed 's%remotes/origin/%%' | sort | tail -n1 | xargs)"
+	test -z "$current_release_branch" && {
+		echo "Could not find the current release branch"
+		return
+	}
+	git checkout "$current_release_branch"
+	git flow bugfix start "$1" "$current_release_branch"
 }
 
 source_dir ~/.bash.d/local/before
@@ -45,8 +51,14 @@ source_dir ~/.bash.d
 source_dir ~/.bash.d/local/after
 
 # ssh aliases
-alias ssh-vm='ssh -A kalvens@2620:9d:4000:72:136c:fa8:54b:9be1'
-alias ssh-ws='ssh kalvens@192.168.1.72'
+alias ssh-ws='ssh gabriellef.rtvision.com'
+ssh-port-forward() {
+	test -z "$1" && {
+		echo "Please provide the port to forward"
+		return
+	}
+    ssh -L $1:localhost:$1 -N gabriellef.rtvision.com
+}
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
@@ -122,8 +134,8 @@ alias ipv6-randip='dd if=/dev/urandom bs=8 count=1 2>/dev/null | od -x -A n | se
 
 bind -f ~/.inputrc
 
-export PNPM_HOME="/home/gabgriellef/.local/share/pnpm"
-export PATH="$PNPM_HOME:$PATH:/home/kalvens/.local/bin"
+export PNPM_HOME="/home/gabriellef/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH:/home/gabriellef/.local/bin"
 
 # pnpm
 export PNPM_HOME="/home/gabriellef/.local/share/pnpm"
