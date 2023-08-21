@@ -57,7 +57,7 @@ ssh-port-forward() {
 		echo "Please provide the port to forward"
 		return
 	}
-    ssh -L $1:localhost:$1 -N gabriellef.rtvision.com
+	ssh -L $1:localhost:$1 -N gabriellef.rtvision.com
 }
 
 # set a fancy prompt (non-color, unless we know we "want" color)
@@ -133,12 +133,11 @@ fi
 alias ipv6-randip='dd if=/dev/urandom bs=8 count=1 2>/dev/null | od -x -A n | sed -e "s/^ //" -e "s/ /:/g" -e "s/:0*/:/g" -e "s/^0*//"'
 
 bind -f ~/.inputrc
-
-export PNPM_HOME="/home/gabriellef/.local/share/pnpm"
-export PATH="$PNPM_HOME:$PATH:/home/gabriellef/.local/bin"
+export LAUNCH_EDITOR="$HOME/launch_editor"
+alias nvim-server="nvim --listen ~/.cache/nvim/server.pipe"
 
 # pnpm
-export PNPM_HOME="/home/gabriellef/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
 *":$PNPM_HOME:"*) ;;
 *) export PATH="$PNPM_HOME:$PATH" ;;
