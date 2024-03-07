@@ -33,36 +33,45 @@ return {
 					})
 
 					local typescriptConfig = {
-						showUnused = true,
-						showDeprecated = true,
 						format = {
 							insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = true
-						},
-						preferences = {
-							importModuleSpecifier = 'non-relative',
-							importModuleSpecifierEnding = 'js'
 						}
 					}
 
 					local util = require('lspconfig.util');
+					local root_dir = util.root_pattern('.git');
 					lspConfig.volar.setup({
 						filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json' },
-						root_dir = util.root_pattern('.git'),
+						root_dir = root_dir,
 						settings = {
-							typescript = typescriptConfig,
-							javascript = typescriptConfig,
 							vue = {
 								complete = {
 									casing = {
 										tags = 'autoKebab'
 									}
 								}
-							},
-							volar = {
-								takeOverMode = {
-									extension = '*.ts|vue|js|mjs|cjs'
-								}
 							}
+						}
+					})
+					lspConfig.tsserver.setup({
+						filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json' },
+						root_dir = root_dir,
+						init_options = {
+							plugins = {
+								{
+									name = "@vue/typescript-plugin",
+									location = "node_modules/@vue/typescript-plugin",
+									languages = { "typescript", "vue" },
+								}
+							},
+							preferences = {
+								importModuleSpecifier = 'non-relative',
+								importModuleSpecifierEnding = 'js'
+							}
+						},
+						settings = {
+							typescript = typescriptConfig,
+							javascript = typescriptConfig,
 						}
 					})
 				end
@@ -188,6 +197,7 @@ return {
 			lsp.preset('recommended')
 			lsp.ensure_installed({
 				'volar',
+				'tsserver',
 				'eslint',
 				'rust_analyzer',
 				'jsonls',
