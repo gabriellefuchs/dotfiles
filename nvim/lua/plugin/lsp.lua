@@ -74,6 +74,12 @@ return {
 							preferences = {
 								importModuleSpecifier = 'non-relative',
 								importModuleSpecifierEnding = 'js'
+								-- includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+								-- includeInlayFunctionParameterTypeHints = true,
+								-- includeInlayVariableTypeHints = true,
+								-- includeInlayPropertyDeclarationTypeHints = true,
+								-- includeInlayFunctionLikeReturnTypeHints = true,
+								-- includeInlayEnumMemberValueHints = true,
 							}
 						},
 						settings = {
@@ -81,6 +87,9 @@ return {
 							javascript = typescriptConfig,
 						}
 					})
+					vim.keymap.set('n', '<leader>R', function()
+						vim.cmd('LspRestart tsserver');
+					end, {})
 				end
 			},
 			-- }}}
@@ -94,6 +103,7 @@ return {
 					'L3MON4D3/LuaSnip',
 					{
 						"zbirenbaum/copilot-cmp",
+						autostart = false,
 						dependencies = {
 							"zbirenbaum/copilot.lua",
 							config = function()
@@ -204,16 +214,16 @@ return {
 			lsp.preset('recommended')
 			lsp.ensure_installed({
 				'volar',
-				'tsserver',
+				'ts_ls',
 				'eslint',
-				'rust_analyzer',
 				'jsonls',
 				'lua_ls',
 				'bashls'
 			})
 			local allowedFormatters = {
 				lua_ls = true,
-				['null-ls'] = true
+				['null-ls'] = true,
+				['rust-analyzer'] = true
 			}
 			local lspFormatting = function(buffer, async)
 				vim.lsp.buf.format({
@@ -253,8 +263,33 @@ return {
 						end,
 					})
 				end
+
+				-- vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 			end)
 			lsp.setup()
 		end
 	},
+	{
+		'mrcjkb/rustaceanvim',
+		version = '^5', -- Recommended
+		ft = { 'rust' },
+		config = function()
+			vim.g.rustaceanvim = {
+				server = {
+					on_attach = function(client, bufnr)
+						vim.keymap.set('n', '<leader>r', function()
+							vim.cmd.RustLsp('runnables');
+						end)
+						vim.keymap.set('n', '<leader>rr', function()
+							vim.cmd.RustLsp({ 'runnables', bang = true });
+						end)
+						vim.keymap.set('n', '<leader>rd', function()
+							vim.cmd.RustLsp({ 'debuggables', bang = true });
+						end)
+						vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+					end
+				},
+			}
+		end
+	}
 }

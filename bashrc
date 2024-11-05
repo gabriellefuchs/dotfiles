@@ -3,6 +3,7 @@
 [ -z "$PS1" ] && return
 
 shopt -s globstar
+export LIBGL_ALWAYS_INDIRECT=1
 
 case ${TERM} in
 xterm* | rxvt* | gnome* | konsole*)
@@ -44,6 +45,14 @@ gfbs() {
 	}
 	git checkout "$current_release_branch"
 	git flow bugfix start "$1" "$current_release_branch"
+}
+
+ssh-port-forward() {
+	test -z "$1" && {
+		echo "Please provide port to forward"
+		return
+	}
+	ssh -L "$1:localhost:$1" -N kalvens@kalvens.rtvision.com
 }
 
 source_dir ~/.bash.d/local/before
@@ -131,9 +140,21 @@ export LAUNCH_EDITOR="$HOME/launch_editor"
 alias nvim-server="nvim --listen ~/.cache/nvim/server.pipe"
 
 # pnpm
-export PNPM_HOME="$HOME/.local/share/pnpm"
+export PNPM_HOME="/home/kalvens/.local/share/pnpm"
 case ":$PATH:" in
-*":$PNPM_HOME:"*) ;;
-*) export PATH="$PNPM_HOME:$PATH" ;;
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+. "$HOME/.cargo/env"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH=$BUN_INSTALL/bin:$PATH
+
+# neovim nightly build
+export PATH="/opt/nvim/bin:$PATH"
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+. "$HOME/.cargo/env"
