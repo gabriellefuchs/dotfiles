@@ -38,7 +38,7 @@ gfbs() {
 		return
 	}
 	git fetch -p
-	local current_release_branch="$(git branch -a | grep -E 'remotes.*release' | sed 's%remotes/origin/%%' | sort | tail -n1 | xargs)"
+	local current_release_branch="$(git branch -a | grep -E 'remotes.*origin.*release' | sed 's%remotes/origin/%%' | sort | tail -n1 | xargs)"
 	test -z "$current_release_branch" && {
 		echo "Could not find the current release branch"
 		return
@@ -58,6 +58,10 @@ ssh-port-forward() {
 source_dir ~/.bash.d/local/before
 source_dir ~/.bash.d
 source_dir ~/.bash.d/local/after
+
+if [[ -f ~/.secrets ]]; then
+	source ~/.secrets
+fi
 
 # ssh aliases
 alias ssh-vm='ssh -A kalvens@2620:9d:4000:72:136c:fa8:54b:9be1'
@@ -142,8 +146,8 @@ alias nvim-server="nvim --listen ~/.cache/nvim/server.pipe"
 # pnpm
 export PNPM_HOME="/home/kalvens/.local/share/pnpm"
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+*":$PNPM_HOME:"*) ;;
+*) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
 
