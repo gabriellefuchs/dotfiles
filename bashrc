@@ -47,6 +47,19 @@ gfbs() {
 	git flow bugfix start "$1" "$current_release_branch"
 }
 
+clean-git-release-branches() {
+	git fetch --all -p
+	local current_release_branch="$(git branch -a | grep -E 'remotes.*origin.*release' | sed 's%remotes/origin/%%' | sort | tail -n1 | xargs)"
+	test -z "$current_release_branch" && {
+		echo "Could not find the current release branch"
+		return
+	}
+	local old_release_branches="$(git branch -lr | grep -v ".*/$current_release_branch" | grep 'release/' | awk '{print $1}')"
+	for branch in $old_release_branches; do
+		git push --delete "${branch%%/*}" "${branch#*/}"
+	done
+}
+
 ssh-port-forward() {
 	test -z "$1" && {
 		echo "Please provide port to forward"
@@ -162,3 +175,7 @@ export PATH="/opt/nvim/bin:$PATH"
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 . "$HOME/.cargo/env"
+export PATH="$HOME/go/bin:$PATH"
+
+# opencode
+export PATH=/home/kalvens/.opencode/bin:$PATH
