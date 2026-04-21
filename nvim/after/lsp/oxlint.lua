@@ -1,17 +1,7 @@
 return {
-	cmd = { 'oxlint', '--lsp', '-A', 'no-console' },
-	filetypes = {
-		'javascript',
-		'javascriptreact',
-		'javascript.jsx',
-		'typescript',
-		'typescriptreact',
-		'typescript.tsx',
-		'vue',
-	},
-	settings = {
-		oxc_language_server = {
-			typeAware = true
-		},
-	}
+	cmd = function(dispatchers, config)
+		return vim.lsp.rpc.start({ 'pnpm', 'exec', 'oxlint', '--lsp' }, dispatchers, {
+			cwd = config.root_dir
+		})
+	end
 }
